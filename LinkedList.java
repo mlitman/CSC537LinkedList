@@ -83,6 +83,35 @@ public class LinkedList
 		}
 	}
 	
+	public int removeAtIndex(int index) throws Exception
+	{
+		if(index < 0 || index >= this.count)
+		{
+			throw new Exception("Remove At Index: Index Out of Bounds (" + index + ")");
+		}
+		else if(index == 0)
+		{
+			return this.removeFront();
+		}
+		else if(index == this.count-1)
+		{
+			return this.removeEnd();
+		}
+		else
+		{
+			Node posBefore = head;
+			for(int i = 0; i < index - 1; i++)
+			{
+				posBefore = posBefore.getNextNode();
+			}
+			Node actualPos = posBefore.getNextNode();
+			posBefore.setNextNode(actualPos.getNextNode());
+			actualPos.setNextNode(null);
+			return actualPos.getPayload();
+		}
+		
+	}
+	
 	public void addAtIndex(int value, int index) throws Exception
 	{
 		if(index < 0 || index > this.count)
@@ -101,15 +130,30 @@ public class LinkedList
 		{
 			//move to the pos right before index
 			Node currNode = head;
-			for(int i = 0; i < index; i++)
+			for(int i = 0; i < index-1; i++)
 			{
 				currNode = currNode.getNextNode();
 			}
 			Node n = new Node(value);
 			n.setNextNode(currNode.getNextNode());
 			currNode.setNextNode(n);
+			this.count++;
 		}
 		
+	}
+	
+	public void displayInReverse() throws Exception
+	{
+		LinkedList temp = new LinkedList();
+		while(head != null)
+		{
+			temp.addEnd(this.removeEnd());
+		}
+		temp.display();
+		while(temp.count > 0)
+		{
+			this.addFront(temp.removeFront());
+		}
 	}
 	
 	public void display()
